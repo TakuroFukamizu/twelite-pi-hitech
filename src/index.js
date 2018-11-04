@@ -1,24 +1,25 @@
 
-const serialPort = require('serialport');
+
+const SerialPort = require('serialport');
+
+const Readline = SerialPort.parsers.Readline;
 const portName = '/dev/ttyUSB0';
 
-var options = {
+const options = {
     baudRate: 115200,  // ボーレートは115200
     dataBits: 8,
     parity: 'none',    // パリティなし
     stopBits: 1,
-    flowControl: false,  // フロー制御なしにしとく
-    parser: serialPort.parsers.readline("\r\n")   // パースは\r\nで
-};
+    flowControl: false  // フロー制御なしにしとく
+}
+const port = new SerialPort(portName, options);
+const parser = port.pipe(new Readline('\r\n'));
 
-var sp = new serialPort.SerialPort(portName, options);
+parser.on('data', console.log)
 
-sp.on('data', function(input) {
-    try {
-        console.log(input);
-    } catch(e) {
-        return;
-    }
-});
+// Open errors will be emitted as an error event
+port.on('error', function(err) {
+    console.log('Error: ', err.message)
+  })
 
 
