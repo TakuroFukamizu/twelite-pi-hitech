@@ -1,23 +1,35 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
 <head>
-<title>TWE-Lite 読み取り</title>
-<script src="/socket.io/socket.io.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>IoT BOX</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script>
 $(function() {
   var socket = io.connect();
+  var prevValue = undefined;
   socket.on('msg', function(data) {
+    console.log(data);
     var date = new Date();
-    var sensorId = data.substr(1, 2);
-    var sensorVoltage = data.substr(27, 4);
-    var sensorValue = data.substr(33,2);
+    var di0 = data.digialIn[0];
+    var str = date.toString() + "デジタルIO-0:" + di0;
 
-    var str = date.toString()
-       + "センサ:" + sensorId + " (" + parseInt(sensorVoltage,16) + " mV) => " + sensorValue;
+    var isOpen = false;
+    if ( prevValue !== undefined && prevValue === di0) {
+      isOpen = di0 ? false : true;
+      console.info(isOpen);
+    }
+    prevValue = di0;
+    $('div#status').text(isOpen ? 'OPEN' : 'CLOSE');
 
-    $('div').prepend(str + '<br>');
+    $('div#current').text(str);
   });
 });
 </script>
-</head><body><div></div></body></html>
+</head>
+<body>
+  <div id="status"></div>
+  <div id="current"></div>
+</body>
+</html>
