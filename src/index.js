@@ -15,7 +15,7 @@ const options = {
 }
 const port = new SerialPort(portName, options, (err) => { 
     console.error("error on connecting");
-    console.error(error);
+    console.error(err);
 });
 // const parser = port.pipe(new Readline('\r\n'));
 // parser.on('data', console.log)
