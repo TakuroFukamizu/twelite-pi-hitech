@@ -3,6 +3,7 @@
 const SerialPort = require('serialport');
 const Http = require('http');
 const SocketIO = require('socket.io');
+const fs = require('fs');
 
 const httpPort = 8080;
 const portName = '/dev/ttyUSB0';
