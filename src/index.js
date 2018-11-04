@@ -4,9 +4,13 @@ const SerialPort = require('serialport');
 const Http = require('http');
 const SocketIO = require('socket.io');
 const fs = require('fs');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const httpPort = 8080;
-const portName = '/dev/ttyUSB0';
+const portName = process.env.TL_USB_PORT;
+// const portName = '/dev/ttyUSB0';
 
 const app = Http.createServer(function(req, res) {
     res.writeHead(200, {'Content-Type': 'text/html'});
