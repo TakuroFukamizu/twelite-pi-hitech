@@ -26,11 +26,19 @@ port.open(() => {
     port.write(':788001000F0000000000000000F8\r\n');
 });
 
-port.on('data', console.log);
+// Read data that is available but keep the stream in "paused mode"
+port.on('readable', function () {
+    console.log('Data:', port.read())
+});
+
+// Switches the port into "flowing mode"
+port.on('data', function (data) {
+    console.log('Data:', data)
+});
 
 // Open errors will be emitted as an error event
 port.on('error', (err) => {
     console.log('Error: ', err.message)
-  })
+});
 
 
