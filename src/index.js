@@ -23,7 +23,7 @@ const port = new SerialPort(portName, options, (err) => {
 // parser.on('data', console.log)
 port.open(() => {
     console.info('open SerialPort');
-    port.write(':788001000F0000000000000000F8\r\n');
+    // port.write(':788001000F0000000000000000F8\r\n');
 });
 
 // Read data that is available but keep the stream in "paused mode"
