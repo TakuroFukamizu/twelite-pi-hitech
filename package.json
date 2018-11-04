@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start": "run-p",
+    "start": "run-p start:*",
     "start:main": "node src/index.js",
     "start:kiosk": "chromium-browser --noerrdialogs --kiosk --incognito http://localhost:8080/",
     "test": "echo \"Error: no test specified\" && exit 1"
