@@ -1,9 +1,17 @@
 
 
 const SerialPort = require('serialport');
+const Http = require('http');
+const SocketIO = require('socket.io');
 
-const Readline = SerialPort.parsers.Readline;
+const httpPort = 8080;
 const portName = '/dev/ttyUSB0';
+
+const app = Http.createServer(function(req, res) {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.end(fs.readFileSync('index.html'));  
+}).listen(httpPort);
+const io = SocketIO.listen(app);
 
 const options = {
     baudRate: 115200,  // ボーレートは115200
@@ -27,13 +35,16 @@ port.open(() => {
 });
 
 // Read data that is available but keep the stream in "paused mode"
-port.on('readable', function () {
-    console.log('Data:', port.read())
+port.on('readable', () => {
+    let data = port.read();
+    io.sockets.emit('msg', data);
+    console.log('Data1:', data);
 });
 
 // Switches the port into "flowing mode"
-port.on('data', function (data) {
-    console.log('Data:', data)
+port.on('data', (data) => {
+    io.sockets.emit('msg', data);
+    console.log('Data2:', data);
 });
 
 // Open errors will be emitted as an error event

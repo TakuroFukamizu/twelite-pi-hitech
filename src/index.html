@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<head>
+<title>TWE-Lite 読み取り</title>
+<script src="/socket.io/socket.io.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+$(function() {
+  var socket = io.connect();
+  socket.on('msg', function(data) {
+    var date = new Date();
+    var sensorId = data.substr(1, 2);
+    var sensorVoltage = data.substr(27, 4);
+    var sensorValue = data.substr(33,2);
+
+    var str = date.toString()
+       + "センサ:" + sensorId + " (" + parseInt(sensorVoltage,16) + " mV) => " + sensorValue;
+
+    $('div').prepend(str + '<br>');
+  });
+});
+</script>
+</head><body><div></div></body></html>
