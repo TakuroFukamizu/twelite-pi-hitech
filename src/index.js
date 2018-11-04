@@ -10,7 +10,7 @@ const portName = '/dev/ttyUSB0';
 
 const app = Http.createServer(function(req, res) {
     res.writeHead(200, {'Content-Type': 'text/html'});
-    res.end(fs.readFileSync('index.html'));  
+    res.end(fs.readFileSync('dist/index.html'));  
 }).listen(httpPort);
 const io = SocketIO.listen(app);
 
