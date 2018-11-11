@@ -1,6 +1,8 @@
 
 import fs from 'fs';
+import path from 'path';
 import http from 'http';
+import express from 'express';
 import socketIO from 'socket.io';
 import dotenv from 'dotenv';
 import TweliteSerialClient from './twelite/TweliteSerialClient';
@@ -13,11 +15,25 @@ const portName = process.env.TL_USB_PORT;
 // const portName = '/dev/ttyUSB0';
 const terminalId = process.env.TL_PAIR_TERMINAL_ID;
 
-const app = http.createServer(function(req, res) {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.end(fs.readFileSync('dist/index.html'));  
-}).listen(httpPort);
-const io = socketIO.listen(app);
+// -----
+
+const app = express();
+app.use(express.static(path.join('dist')));
+
+const http_ = http.createServer(app);
+// const app = http.createServer(function(req, res) {
+//     res.writeHead(200, {'Content-Type': 'text/html'});
+//     res.end(fs.readFileSync('dist/index.html'));  
+// }).listen(httpPort);
+// const io = socketIO.listen(app);
+const io = socketIO(http_);
+
+http_.listen(httpPort, () => {
+    console.log(`listening on *:${httpPort}`);
+});
+
+
+// -----
 
 const twelite = new TweliteSerialClient(portName);
 twelite.on('received', (msg) => { 

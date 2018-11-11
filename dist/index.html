@@ -10,38 +10,50 @@ $(function() {
   var socket = io.connect();
   var prevValue = undefined;
   var isOpen = false;
+  var timeoutId = null;
+
+  const switchBox = (open) => {
+    $('#iconimg').attr('src',open ? 'box01_open.png' : 'box01_close.png');
+    isOpen = open ? true : false;
+  }
 
   socket.on('msg', function(data) {
+    if(timeoutId) {
+      clearInterval(timeoutId);
+    }
     console.log(data);
     var date = new Date();
     var di0 = data.digialIn[0];
     var str = date.toString() + "デジタルIO-0:" + di0;
 
-    if ( prevValue !== undefined && prevValue === di0) {
-      isOpen = di0 ? false : true;
-      console.info(isOpen);
-    }
-    prevValue = di0;
-    $('#iconimg').attr('src',isOpen ? 'box01_open.png' : 'box01_close.png');
+    // if ( prevValue !== undefined && prevValue === di0) {
+    //   isOpen = di0 ? false : true;
+    //   console.info(isOpen);
+    // }
+    // prevValue = di0;
+    // isOpen = di0;
+    timeoutId = setTimeout(() => {
+      switchBox(false);
+    }, 2000);
+
+    switchBox(di0);
     $('div#status').text(isOpen ? 'OPEN' : 'CLOSE');
 
     $('div#current').text(str);
   });
   $('#icon').click(() => {
     if (isOpen) {
-      $('#iconimg').attr('src','box01_close.png');
-      isOpen = false;
+      switchBox(false);
     } else {
-      $('#iconimg').attr('src','box01_open.png');
-      isOpen = true;
+      switchBox(true);
     }
   });
 });
 </script>
 </head>
 <body>
-  <div id="icon">
-    <img id="iconimg" src="box01_close.png">
+  <div id="icon" style="margin-left:auto; margin-right:auto;">
+    <img id="iconimg" src="box01_close.png" width="50%" height="50%">
   </div>
   <div id="status"></div>
   <div id="current"></div>
