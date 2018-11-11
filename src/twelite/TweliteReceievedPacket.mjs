@@ -24,7 +24,7 @@ https://mono-wireless.com/jp/products/TWE-APPS/App_Twelite/step3-81.html
  g: 1バイト：チェックサム
 */
 
-export class TweliteReceievedPacket { 
+export default class TweliteReceievedPacket { 
     constructor(buffer) { 
         this._rawBuffer = buffer;
         this.deviceId = parseInt(buffer.slice(1, 3).toString(), 16);
