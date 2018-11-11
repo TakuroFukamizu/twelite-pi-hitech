@@ -29,6 +29,7 @@ twelite.on('received', (msg) => {
         io.sockets.emit('msg', jsonObj);
         console.log('Data:',
             msg.deviceId, msg.dataType, msg.packetId, msg.protocol, msg.signal, msg.terminalId, msg.toId, msg.timestamp, msg.repeaterFlag,
+            msg.battery,
             msg.digialIn[0]);
     } catch (ex) { 
         console.error(ex);
